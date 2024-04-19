@@ -45,7 +45,7 @@ return new class extends Migration
     {
         $tableName = $meta ?: $this->tableName; 
 
-        Schema::create($tableName, function (Blueprint $table) {
+        Schema::create($tableName, function (Blueprint $table) use($meta, $tableName) {
             $table->id();
 
             $table->string('type')->default('null');
