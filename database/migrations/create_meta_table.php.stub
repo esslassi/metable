@@ -40,12 +40,18 @@ return new class extends Migration
 
         $this->dropCustomTables();
     }
-
-    public function createTableSchema($tableName = null, $meta = null)
+    
+    public function createTableSchema($tableName = null)
     {
-        $tableName = $meta ?: $this->tableName; 
+        $parent = null;
+        if( is_array( $tableName ) ) {
+            $parent    = $tableName[0];
+            $tableName = $tableName[1];
+        } else {
+            $tableName = $tableName ?: $this->tableName;
+        }
 
-        Schema::create($tableName, function (Blueprint $table) use($meta, $tableName) {
+        Schema::create($tableName, function (Blueprint $table) use($parent, $tableName) {
             $table->id();
 
             $table->string('type')->default('null');
@@ -53,9 +59,10 @@ return new class extends Migration
             $table->string('key')->index();
             $table->longText('value')->nullable();
 
-            if( $meta ) {
-                $key = Str::singular($tableName) . '_id';
-                $table->foreign($key)->references('id')->on($tableName)->onDelete('cascade');
+            if( $parent ) {
+                $key = Str::singular($parent) . '_id';
+                $table->bigInteger($key)->unsigned();
+                $table->foreign($key)->references('id')->on($parent)->onDelete('cascade');
             } else {
                 $table->bigInteger('metable_id')->unsigned()->index();
                 $table->string('metable_type')->index();
@@ -73,7 +80,7 @@ return new class extends Migration
     public function customTablesSchemas()
     {
         foreach ($this->customTables as $tableName => $tableMeta) {
-            $this->createTableSchema($tableName, $tableMeta);
+            $this->createTableSchema([$tableName, $tableMeta]);
         }
     }
 
