@@ -5,12 +5,14 @@ namespace Esslassi\Metable;
 use Esslassi\Metable\Traits\HasMetaAttributes;
 use Esslassi\Metable\Traits\HasMetaEvents;
 use Esslassi\Metable\Traits\HasMetaRelationship;
+use Illuminate\Database\Eloquent\Concerns\HasGlobalScopes;
 use Illuminate\Support\Arr;
 
 trait Metable {
     use HasMetaAttributes,
 		HasMetaEvents,
-		HasMetaRelationship;
+		HasMetaRelationship,
+		HasGlobalScopes;
 
     public function meta($key = null, $default = null)
     {
