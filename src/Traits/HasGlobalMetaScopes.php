@@ -351,4 +351,76 @@ trait HasGlobalMetaScopes
             }
         });
     }
+
+    /**
+     * whereMetaColumnIn scope for query.
+     *
+     * @param  Builder   $query
+     * @param  string    $key
+     * @param  mixed     $value
+     * @return Builder
+     */
+    public function scopeWhereMetaColumnIn(Builder $query, $key, $value)
+    {
+        return $this->whereMetaColumnInProccess($query, $key, $value, true, false);
+    }
+
+    /**
+     * whereMetaColumnNotIn scope for query.
+     *
+     * @param  Builder   $query
+     * @param  string    $key
+     * @param  mixed     $value
+     * @return Builder
+     */
+    public function scopeWhereMetaColumnNotIn(Builder $query, $key, $value) {
+        return $this->whereMetaColumnInProccess($query, $key, $value, false, false);
+    }
+
+    /**
+     * orWhereMetaColumnIn scope for query.
+     *
+     * @param  Builder   $query
+     * @param  string    $key
+     * @param  mixed     $value
+     * @return Builder
+     */
+    public function scopeOrWhereMetaColumnIn(Builder $query, $key, $value)
+    {
+        return $this->whereMetaColumnInProccess($query, $key, $value, true, true);
+    }
+
+    /**
+     * orWhereMetaColumnNotIn scope for query.
+     *
+     * @param  Builder   $query
+     * @param  string    $key
+     * @param  mixed     $value
+     * @return Builder
+     */
+    public function scopeOrWhereMetaColumnNotIn(Builder $query, $key, $value) {
+        return $this->whereMetaColumnInProccess($query, $key, $value, false, true);
+    }
+
+    /**
+     * A proccess method for whereMetaColumnIn and whereMetaColumnNotIn scopes.
+     *
+     * @param  Builder   $query
+     * @param  string    $key
+     * @param  mixed     $value
+     * @param  bool      $in
+     * @param  bool      $orWhere
+     * @return Builder
+     */
+    public function whereMetaColumnInProccess(Builder $query, $key, $value, $in = true, $orWhere = false) {
+        $relation = static::metaRelationName();
+
+        $methodType = $orWhere ? 'orWhereHas' : 'whereHas';
+
+        $expression = ($in ? '' : 'NOT ') . "FIND_IN_SET(?, REGEXP_REPLACE(`value`, '[\\[\\]\\s]+', ''))";
+        
+        return $query->{$methodType}($relation, function(Builder $query) use ($expression, $key, $value) {
+            $query->where('key', $key)->where('type', MetaType::META_ARRAY)->whereRaw($expression, [$value]);
+        });
+    }
 }
