@@ -417,7 +417,7 @@ trait HasGlobalMetaScopes
 
         $methodType = $orWhere ? 'orWhereHas' : 'whereHas';
 
-        $expression = ($in ? '' : 'NOT ') . "FIND_IN_SET(?, REGEXP_REPLACE(`value`, '[\\[\\]\\s]+', ''))";
+        $expression = ($in ? '' : 'NOT ') . "FIND_IN_SET(?, REGEXP_REPLACE(`value`, '[\\\[\\\]\\\s]+', ''))";
         
         return $query->{$methodType}($relation, function(Builder $query) use ($expression, $key, $value) {
             $query->where('key', $key)->where('type', MetaType::META_ARRAY)->whereRaw($expression, [$value]);
