@@ -64,4 +64,8 @@ class Meta extends Model
         $this->type = MetaType::guessType($value);
         $this->attributes['value'] = MetaType::encode($value);
     }
+
+	function getThroughKeyName() {
+		return 'value';
+	}
 }

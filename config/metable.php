@@ -12,14 +12,7 @@ return [
 
         // default table for all models
 
-        'default' => 'meta',
-
-        // custom tables list
-
-        'custom'  => [
-            
-            // example : "posts" => "post_meta"
-
-        ],
+        'default' => 'meta'
+        
     ]
 ];

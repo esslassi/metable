@@ -6,13 +6,15 @@ use Esslassi\Metable\Traits\HasGlobalMetaScopes;
 use Esslassi\Metable\Traits\HasMetaAttributes;
 use Esslassi\Metable\Traits\HasMetaEvents;
 use Esslassi\Metable\Traits\HasMetaRelationship;
+use Esslassi\Metable\Traits\HasMetaRelationships;
 use Illuminate\Support\Arr;
 
 trait Metable {
     use HasMetaAttributes,
 		HasMetaEvents,
 		HasMetaRelationship,
-		HasGlobalMetaScopes;
+		HasGlobalMetaScopes,
+		HasMetaRelationships;
 
     public function meta($key = null, $default = null)
     {

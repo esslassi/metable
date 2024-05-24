@@ -47,7 +47,7 @@ trait HasGlobalMetaScopes
      */
     public function scopeWhereMeta(Builder $query, $key, $operator = null, $value = MetaType::META_NOVAL)
     {
-        return $this->whereMetaProccess($query, $key, $operator, $value);
+        return $this->whereMetaBaseQuery($query, $key, $operator, $value);
     }
 
     /**
@@ -61,7 +61,7 @@ trait HasGlobalMetaScopes
      */
     public function scopeOrWhereMeta(Builder $query, $key, $operator = null, $value = MetaType::META_NOVAL)
     {
-        return $this->whereMetaProccess($query, $key, $operator, $value, true);
+        return $this->whereMetaBaseQuery($query, $key, $operator, $value, true);
     }
 
     /**
@@ -74,7 +74,7 @@ trait HasGlobalMetaScopes
      * @param  bool      $orWhere
      * @return Builder
      */
-    private function whereMetaProccess(Builder $query, $key, $operator, $value, $orWhere = false)
+    private function whereMetaBaseQuery(Builder $query, $key, $operator, $value, $orWhere = false)
     {
         $methodType = $orWhere ? 'orWhereHas' : 'whereHas';
 
@@ -138,7 +138,7 @@ trait HasGlobalMetaScopes
      */
     public function scopeWhereMetaIn(Builder $query, $key, $values)
     {
-        return $this->whereMetaInProccess($query, $key, $values, true);
+        return $this->whereMetaInBaseQuery($query, $key, $values, true);
     }
 
     /**
@@ -150,7 +150,7 @@ trait HasGlobalMetaScopes
      * @return Builder
      */
     public function scopeWhereMetaNotIn(Builder $query, $key, $values) {
-        return $this->whereMetaInProccess($query, $key, $values, false);
+        return $this->whereMetaInBaseQuery($query, $key, $values, false);
     }
 
     /**
@@ -162,7 +162,7 @@ trait HasGlobalMetaScopes
      * @param  bool      $in
      * @return Builder
      */
-    public function whereMetaInProccess(Builder $query, $key, $values, $in = true) {
+    public function whereMetaInBaseQuery(Builder $query, $key, $values, $in = true) {
         $relation = static::metaRelationName();
 
         $methodType = $in ? 'whereIn' : 'whereNotIn';
@@ -185,7 +185,7 @@ trait HasGlobalMetaScopes
      */
     public function scopeWhereMetaNull(Builder $query, $key)
     {
-        $this->whereMetaNullProccess($query, $key);
+        $this->whereMetaNullBaseQuery($query, $key);
     }
 
     /**
@@ -197,7 +197,7 @@ trait HasGlobalMetaScopes
      */
     public function scopeOrWhereMetaNull(Builder $query, $key)
     {
-        return $this->whereMetaNullProccess($query, $key, true);
+        return $this->whereMetaNullBaseQuery($query, $key, true);
     }
 
     /**
@@ -209,7 +209,7 @@ trait HasGlobalMetaScopes
      */
     public function scopeWhereMetaNotNull(Builder $query, $key)
     {
-        $this->whereMetaNullProccess($query, $key, false, '<>');
+        $this->whereMetaNullBaseQuery($query, $key, false, '<>');
     }
 
     /**
@@ -221,7 +221,7 @@ trait HasGlobalMetaScopes
      */
     public function scopeOrWhereMetaNotNull(Builder $query, $key)
     {
-        return $this->whereMetaNullProccess($query, $key, true, '<>');
+        return $this->whereMetaNullBaseQuery($query, $key, true, '<>');
     }
 
     /**
@@ -233,7 +233,7 @@ trait HasGlobalMetaScopes
      * @param  string    $operator
      * @return Builder
      */
-    private function whereMetaNullProccess(Builder $query, $key, $orWhere = false, $operator = '=')
+    private function whereMetaNullBaseQuery(Builder $query, $key, $orWhere = false, $operator = '=')
     {
         $relation = static::metaRelationName();
 
@@ -254,7 +254,7 @@ trait HasGlobalMetaScopes
      */
     public function scopeWhereMetaHas(Builder $query, $key = null, $countNull = false)
     {
-        $this->whereMetaHasProccess($query, $key, $countNull);
+        $this->whereMetaHasBaseQuery($query, $key, $countNull);
     }
 
     /**
@@ -267,7 +267,7 @@ trait HasGlobalMetaScopes
      */
     public function scopeOrWhereMetaHas(Builder $query, $key = null, $countNull = false)
     {
-        $this->whereMetaHasProccess($query, $key, $countNull, true);
+        $this->whereMetaHasBaseQuery($query, $key, $countNull, true);
     }
 
     /**
@@ -279,7 +279,7 @@ trait HasGlobalMetaScopes
      * @param  bool      $orWhere
      * @return Builder
      */
-    private function whereMetaHasProccess(Builder $query, $key, $countNull, $orWhere = false)
+    private function whereMetaHasBaseQuery(Builder $query, $key, $countNull, $orWhere = false)
     {
         $relation = static::metaRelationName();
 
@@ -308,7 +308,7 @@ trait HasGlobalMetaScopes
      */
     public function scopeWhereMetaDoesntHave(Builder $query, $key = null, $countNull = false)
     {
-        $this->whereMetaDoesntHaveProccess($query, $key, $countNull);
+        $this->whereMetaDoesntHaveBaseQuery($query, $key, $countNull);
     }
 
     /**
@@ -321,7 +321,7 @@ trait HasGlobalMetaScopes
      */
     public function scopeOrWhereMetaDoesntHave(Builder $query, $key = null, $countNull = false)
     {
-        $this->whereMetaDoesntHaveProccess($query, $key, $countNull, true);
+        $this->whereMetaDoesntHaveBaseQuery($query, $key, $countNull, true);
     }
 
     /**
@@ -333,7 +333,7 @@ trait HasGlobalMetaScopes
      * @param  bool      $orWhere
      * @return Builder
      */
-    public function whereMetaDoesntHaveProccess(Builder $query, $key, $countNull, $orWhere = false)
+    public function whereMetaDoesntHaveBaseQuery(Builder $query, $key, $countNull, $orWhere = false)
     {
         $relation = static::metaRelationName();
 
@@ -353,57 +353,57 @@ trait HasGlobalMetaScopes
     }
 
     /**
-     * whereMetaColumnIn scope for query.
+     * whereInMetaArray scope for query.
      *
      * @param  Builder   $query
      * @param  string    $key
      * @param  mixed     $value
      * @return Builder
      */
-    public function scopeWhereMetaColumnIn(Builder $query, $key, $value)
+    public function scopeWhereInMetaArray(Builder $query, $key, $value)
     {
-        return $this->whereMetaColumnInProccess($query, $key, $value, true, false);
+        return $this->whereInMetaArrayBaseQuery($query, $key, $value, true, false);
     }
 
     /**
-     * whereMetaColumnNotIn scope for query.
+     * whereNotInMetaArray scope for query.
      *
      * @param  Builder   $query
      * @param  string    $key
      * @param  mixed     $value
      * @return Builder
      */
-    public function scopeWhereMetaColumnNotIn(Builder $query, $key, $value) {
-        return $this->whereMetaColumnInProccess($query, $key, $value, false, false);
+    public function scopeWhereNotInMetaArray(Builder $query, $key, $value) {
+        return $this->whereInMetaArrayBaseQuery($query, $key, $value, false, false);
     }
 
     /**
-     * orWhereMetaColumnIn scope for query.
+     * orWhereInMetaArray scope for query.
      *
      * @param  Builder   $query
      * @param  string    $key
      * @param  mixed     $value
      * @return Builder
      */
-    public function scopeOrWhereMetaColumnIn(Builder $query, $key, $value)
+    public function scopeOrWhereInMetaArray(Builder $query, $key, $value)
     {
-        return $this->whereMetaColumnInProccess($query, $key, $value, true, true);
+        return $this->whereInMetaArrayBaseQuery($query, $key, $value, true, true);
     }
 
     /**
-     * orWhereMetaColumnNotIn scope for query.
+     * orWhereNotInMetaArray scope for query.
      *
      * @param  Builder   $query
      * @param  string    $key
      * @param  mixed     $value
      * @return Builder
      */
-    public function scopeOrWhereMetaColumnNotIn(Builder $query, $key, $value) {
-        return $this->whereMetaColumnInProccess($query, $key, $value, false, true);
+    public function scopeOrWhereNotInMetaArray(Builder $query, $key, $value) {
+        return $this->whereInMetaArrayBaseQuery($query, $key, $value, false, true);
     }
 
     /**
-     * A proccess method for whereMetaColumnIn and whereMetaColumnNotIn scopes.
+     * A proccess method for whereInMetaArray and whereNotInMetaArray scopes.
      *
      * @param  Builder   $query
      * @param  string    $key
@@ -412,7 +412,7 @@ trait HasGlobalMetaScopes
      * @param  bool      $orWhere
      * @return Builder
      */
-    public function whereMetaColumnInProccess(Builder $query, $key, $value, $in = true, $orWhere = false) {
+    public function whereInMetaArrayBaseQuery(Builder $query, $key, $value, $in = true, $orWhere = false) {
         $relation = static::metaRelationName();
 
         $methodType = $orWhere ? 'orWhereHas' : 'whereHas';

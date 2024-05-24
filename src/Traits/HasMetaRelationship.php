@@ -13,6 +13,7 @@ trait HasMetaRelationship
 
     public function metas() : MorphMany {
         $instance = new Meta();
+
         // Here we will gather up the morph type and ID for the relationship so that we
         // can properly query the intermediate table of a relation. Finally, we will
         // get the table and create the relationship instances for the developers.
