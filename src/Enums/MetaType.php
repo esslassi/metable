@@ -145,4 +145,8 @@ enum MetaType: string
     private static function isJson($string) {
         return (bool) preg_match('/^\s*(\{.*\}|\[.*\])\s*$/s', $string);
     }
+
+    public static function values() {
+        return array_column(self::cases(), 'value');
+    }
 }

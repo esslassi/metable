@@ -80,27 +80,6 @@ trait HasGlobalMetaScopes
 
         $relation = static::metaRelationName();
 
-        if (is_array($key)) {
-
-            $conditions = $key;
-
-            foreach ($conditions as $condition) {
-
-                if(!is_array($condition)) {
-
-                    list($conditionKey, $conditionOperator, $conditionValue) = $this->extractKeyOperatorValue($conditions);
-
-                    $query = call_user_func_array([$this, 'scopeWhereMetaTest'], [$query, $conditionKey, $conditionOperator, $conditionValue, $orWhere]);
-
-                    continue;
-                }
-
-                list($conditionKey, $conditionOperator, $conditionValue) = $this->extractKeyOperatorValue($condition);
-
-                $query = call_user_func_array([$this, 'scopeWhereMetaTest'], [$query, $conditionKey, $conditionOperator, $conditionValue, $orWhere]);
-            }
-        }
-
         return $query->{$methodType}($relation, function(Builder $metaQuery) use($key, $value, $operator){
             if ($value === MetaType::META_NOVAL) {
                 $value = $operator;
@@ -108,6 +87,60 @@ trait HasGlobalMetaScopes
             }
 
             $metaQuery->where('key', $key)->where('value', $operator, $value);
+        });
+    }
+
+    /**
+     * whereMeta scope for query.
+     *
+     * @param  Builder   $query
+     * @param  string    $key
+     * @param  string    $operator
+     * @param  mixed     $value
+     * @return Builder
+     */
+    public function scopeWhereMetaNot(Builder $query, $key, $operator = null, $value = MetaType::META_NOVAL)
+    {
+        return $this->whereMetaBaseQueryNot($query, $key, $operator, $value);
+    }
+
+    /**
+     * orWhereMeta scope for query.
+     *
+     * @param  Builder   $query
+     * @param  string    $key
+     * @param  string    $operator
+     * @param  mixed     $value
+     * @return Builder
+     */
+    public function scopeOrWhereMetaNot(Builder $query, $key, $operator = null, $value = MetaType::META_NOVAL)
+    {
+        return $this->whereMetaBaseQueryNot($query, $key, $operator, $value, true);
+    }
+
+    /**
+     * A proccess method for whereMeta scopes.
+     *
+     * @param  Builder   $query
+     * @param  string    $key
+     * @param  string    $operator
+     * @param  mixed     $value
+     * @param  bool      $orWhere
+     * @return Builder
+     */
+    private function whereMetaBaseQueryNot(Builder $query, $key, $operator, $value, $orWhere = false)
+    {
+        $methodType = $orWhere ? 'orWhereHas' : 'whereHas';
+
+        $relation = static::metaRelationName();
+
+        return $query->{$methodType}($relation, function(Builder $metaQuery) use($key, $value, $operator){
+            if ($value === MetaType::META_NOVAL) {
+                $value = $operator;
+                $operator = '=';
+            }
+
+            $metaQuery->where('key', $key)->whereNot('value', $operator, $value);
         });
     }
 

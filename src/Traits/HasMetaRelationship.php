@@ -22,7 +22,7 @@ trait HasMetaRelationship
         $table = $instance->getTable();
 
         $localKey = $this->getKeyName();
-
+        
         return new MorphMany($instance->newQuery(), $this, $table.'.'.$type, $table.'.'.$id, $localKey);
     }
 

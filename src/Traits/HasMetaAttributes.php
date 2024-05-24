@@ -276,6 +276,12 @@ trait HasMetaAttributes
 		return false;
 	}
 
+	/**
+	 * Check if a meta exists
+	 * @param string $key
+	 * @param bool $deletion
+	 * @return bool
+	 */
 	public function hasMeta($key, $deletion = false): bool {
 		if ( is_string( $key ) && preg_match( '/[,|]/is', $key ) ) {
 			$key = preg_split( '/ ?[,|] ?/', $key );
@@ -299,6 +305,7 @@ trait HasMetaAttributes
 		}
 		return true;
 	}
+
 	/**
 	 * Set attributes for the model
 	 *

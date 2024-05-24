@@ -19,7 +19,7 @@ trait HasMetaRelationships
      * @param  string|null  $secondLocalKey
      * @return \Esslassi\Metable\Relations\MetaOne
      */
-    public function hasMetaOne($related, $metaKey = null, $localKey = null, $secondLocalKey = null)
+    public function hasMetaOne($related, $metaKey = null, $localKey = null)
     {
         $through = $this->newRelatedMetaThroughInstance(Meta::class);
 
@@ -30,7 +30,7 @@ trait HasMetaRelationships
         return $this->newHasMetaOne(
             $this->newRelatedMetaInstance($related)->newQuery(), $this, $through,
             $metaKey, $firstKey, $secondKey, $localKey ?: $this->getKeyName(),
-            $secondLocalKey ?: $through->getThroughKeyName()
+            $through->getThroughKeyName()
         );
     }
 

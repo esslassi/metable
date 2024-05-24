@@ -11,13 +11,21 @@ class Meta extends Model
     protected $originalValue;
 
     protected $guarded = ['id'];
+	
 	/**
 	 * Whether or not to delete the Data on save.
 	 *
 	 * @var bool
 	 */
 	protected $markForDeletion = false;
-
+	
+	/**
+	 * Create a new meta model instance.
+	 *
+	 * @param array $attributes
+	 * @return void
+	 * 
+	 */
     public function __construct(array $attributes = []) {
         $tableName = config('metable.tables.default', 'meta');
 
@@ -27,7 +35,7 @@ class Meta extends Model
     }
 
     /**
-     * Get the parent meta model (ex: Post, User, etc..).
+     * Get the parent meta model.
      */
     public function metable() {
         return $this->morphTo();
@@ -65,7 +73,12 @@ class Meta extends Model
         $this->attributes['value'] = MetaType::encode($value);
     }
 
-	function getThroughKeyName() {
+    /**
+	 * Get through key name.
+	 *
+	 * @return string
+	 */
+	public function getThroughKeyName() {
 		return 'value';
 	}
 }
