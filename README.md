@@ -85,7 +85,7 @@ Additionally, you can specify default values by assigning an array called `$defa
 
 This is being the desired and expected functionality for most projects, but be aware that you may need to reimplement default functionality with your own custom accessors and mutators if this functionality does not fit your needs.
 
-This functionality is most suited for meta entries that note exceptions to rules. For example: employees sick out of office (default value: in office), nodes taken down for maintenance (default value: node up), etc. This means the table doesn't need to store data on every entry which is in the expected state, only those rows in the exceptional state, and allows the rows to have a default state upon creation without needing to add code to write it.
+This functionality is most suited for meta entries that note exceptions to rules. For example: users re not admins (default value: not admin), nodes taken down for maintenance (default value: node up), etc. This means the table doesn't need to store data on every entry which is in the expected state, only those rows in the exceptional state, and allows the rows to have a default state upon creation without needing to add code to write it.
 
 ```
    public $defaultMetaValues = [
